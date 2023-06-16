@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import styles from './Carta.module.css';
-import { seleccionar, attack } from '../redux/cartasSlice';
+import { seleccionar, attack, desSeleccionar } from '../redux/cartasSlice';
 import { useDispatch } from "react-redux";
 
 
@@ -16,8 +16,12 @@ export  function Carta ({id, name, attackprop, health, selected }) {
         dispatch(seleccionar(id));
       };
 
+      const desseleccionar = () => {
+        dispatch(desSeleccionar(id));
+      };
+
       const attackdmg = () => {
-        dispatch(attack(attackprop));
+        dispatch(attack({attackprop, id}));
       };
 
 
@@ -25,7 +29,7 @@ export  function Carta ({id, name, attackprop, health, selected }) {
 
     <div>
 
-         <div className={styles.carta}>
+        <div className={styles.carta}>
 
             <p>Name: {name}</p>
             <p>Attack: {attackprop}</p>
@@ -35,6 +39,8 @@ export  function Carta ({id, name, attackprop, health, selected }) {
             <div className={styles.botones}>
 
                 <button onClick = { attackdmg }> Attack </button>
+
+                <button onClick = { desseleccionar }> Desselec </button>
 
                 <button onClick = { selectionar }> Select </button>
 

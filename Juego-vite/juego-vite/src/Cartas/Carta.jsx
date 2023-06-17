@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Carta.module.css';
-import { seleccionar, attack, desSeleccionar } from '../redux/cartasSlice';
+import { seleccionar, attackAll, desSeleccionar, attackSingle } from '../redux/cartasSlice';
 import { useDispatch } from "react-redux";
 
 
@@ -9,19 +9,27 @@ import { useDispatch } from "react-redux";
 export  function Carta ({id, name, attackprop, health, selected }) {
 
 
+  const [selection, setSelection ] = useState(false)
+
     const dispatch = useDispatch();
 
 
-    const selectionar = () => {
+      const selectionar = () => {
         dispatch(seleccionar(id));
+        setSelection(true);
       };
 
       const desseleccionar = () => {
         dispatch(desSeleccionar(id));
+        setSelection(false);
       };
 
       const attackdmg = () => {
-        dispatch(attack({attackprop, id}));
+        dispatch(attackAll({ attackprop:15 }));
+      };
+
+      const attackdmg2 = () => {
+        dispatch(attackSingle({ attackprop:25 }));
       };
 
 
@@ -29,7 +37,7 @@ export  function Carta ({id, name, attackprop, health, selected }) {
 
     <div>
 
-        <div className={styles.carta}>
+        <div className={ selection ? styles.cartaSelect : styles.cartaUnselect }>
 
             <p>Name: {name}</p>
             <p>Attack: {attackprop}</p>
@@ -38,11 +46,17 @@ export  function Carta ({id, name, attackprop, health, selected }) {
 
             <div className={styles.botones}>
 
-                <button onClick = { attackdmg }> Attack </button>
+                <div className={styles.botonesAttack}>
+                  <button onClick = { attackdmg }> AttackAll </button>
+                  <button onClick = { attackdmg2 }> AttackSingle </button>
+                </div>
+                
 
-                <button onClick = { desseleccionar }> Desselec </button>
+                <button onClick = { desseleccionar }> Desselect </button>
 
                 <button onClick = { selectionar }> Select </button>
+
+                
 
             </div>
 

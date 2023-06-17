@@ -32,7 +32,9 @@ const initialState = {
             health: 100,
             selected: false,
         }
-    ]
+    ],
+    seleccionados: [],
+    error: '',
 }
 
 
@@ -48,13 +50,16 @@ export const cartasSlice = createSlice({
             
             for (let i = 0; i < state.cartas.length ; i++) {
 
-                if (state.cartas[i].id === id) state.cartas[i].selected = true;
+                if (state.cartas[i].id === id) {
+                    state.cartas[i].selected = true;
+                    state.seleccionados.push(state.cartas[i])
+                }
 
             }
             
         },
 
-desSeleccionar: (state, action) => {
+        desSeleccionar: (state, action) => {
             const id = action.payload;
             
             for (let i = 0; i < state.cartas.length ; i++) {
@@ -65,38 +70,44 @@ desSeleccionar: (state, action) => {
             
         },
 
-        attack: (state, action)=>{
+        attackAll: (state, action)=>{
 
-            const {attackprop, id} = action.payload;
-            const seleccionados=[];
-
-            console.log(id)
+            const { attackprop } = action.payload;
+            console.log(attackprop)
             
+
             for (let i = 0; i < state.cartas.length ; i++) {
 
+                if (state.cartas[i].selected === true) {
 
-                if(state.cartas[i].selected === true) {
+                    state.cartas[i].health = state.cartas[i].health - attackprop;
+                }
 
-                    seleccionados.push(state.cartas[i])
+              }
+        },
 
-                    console.log (seleccionados)
+        attackSingle: (state, action) => {
 
-                    if(seleccionados.length > 1) {
+            const { attackprop } = action.payload;
 
-                        state.cartas[i].attack = 'solo un objetivo';
-                        return
-    
-                    }
+            if(state.seleccionados.length > 1) {
 
-                } else{
-                    seleccionados[0].health - attackprop;
-                } 
+                state.error = 'Solo un objetivo';
+             }
 
+            if(state.seleccionados.length  === 1){
+
+                for (let i = 0; i < state.cartas.length ; i++) {
+                    if(state.cartas[i].selected === true) {
+                            state.cartas[i].health = state.cartas[i].health - attackprop;
+                    }  
+                  }
             }
+                   
         }
     }
 })
 
-export const { seleccionar, attack, desSeleccionar } = cartasSlice.actions;
+export const { seleccionar, attackAll, desSeleccionar, attackSingle } = cartasSlice.actions;
 
 export default cartasSlice.reducer;

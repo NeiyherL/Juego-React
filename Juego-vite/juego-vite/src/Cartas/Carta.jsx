@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './Carta.module.css';
 import { seleccionar, attackAll, desSeleccionar, attackSingle } from '../redux/cartasSlice';
 import { useDispatch } from "react-redux";
@@ -9,19 +9,19 @@ import { useDispatch } from "react-redux";
 export  function Carta ({id, name, attackprop, health, selected }) {
 
 
-  const [selection, setSelection ] = useState(false)
+  
 
     const dispatch = useDispatch();
 
 
       const selectionar = () => {
         dispatch(seleccionar(id));
-        setSelection(true);
+        
       };
 
       const desseleccionar = () => {
         dispatch(desSeleccionar(id));
-        setSelection(false);
+        
       };
 
       const attackdmg = () => {
@@ -37,7 +37,7 @@ export  function Carta ({id, name, attackprop, health, selected }) {
 
     <div>
 
-        <div className={ selection ? styles.cartaSelect : styles.cartaUnselect }>
+        <div className={ selected ? styles.cartaSelect : styles.cartaUnselect }>
 
             <p>Name: {name}</p>
             <p>Attack: {attackprop}</p>
